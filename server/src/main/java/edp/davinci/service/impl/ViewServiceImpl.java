@@ -481,6 +481,10 @@ public class ViewServiceImpl extends BaseEntityService implements ViewService {
             return null;
         }
 
+        if (!PageUtils.checkPageMaxInfo(executeParam.getPageSize())) {
+            throw new ServerException("Invalid page info");
+        }
+
         ViewWithSource viewWithSource = getViewWithSource(id);
         ProjectDetail projectDetail = projectService.getProjectDetail(viewWithSource.getProjectId(), user, false);
         if (!projectService.allowGetData(projectDetail, user)) {
