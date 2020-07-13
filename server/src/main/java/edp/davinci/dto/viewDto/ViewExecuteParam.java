@@ -20,13 +20,16 @@
 package edp.davinci.dto.viewDto;
 
 import com.alibaba.druid.util.StringUtils;
+import edp.core.exception.ServerException;
 import edp.core.utils.CollectionUtils;
 import edp.core.utils.SqlUtils;
 import lombok.Data;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import static edp.core.consts.Consts.*;
@@ -170,5 +173,46 @@ public class ViewExecuteParam {
             return keywordPrefix + field + keywordSuffix;
         }
         return field;
+    }
+
+    public void checkInjection() {
+        //check groups
+        if (!ListUtils.isEmpty(groups)) {
+            for (String group : groups) {
+                Matcher mGroup = PATTERN_SQL_INJECTION.matcher(group.trim());
+                if (mGroup.find()) {
+                    throw new ServerException("Invalid groups sql");
+                }
+            }
+        }
+
+        //check aggregators
+        if (!ListUtils.isEmpty(aggregators)) {
+            for (Aggregator agg : aggregators) {
+                Matcher mAggColumn = PATTERN_SQL_INJECTION.matcher(agg.getColumn().trim());
+                Matcher mAggFunc = PATTERN_SQL_INJECTION.matcher(agg.getFunc().trim());
+                if (mAggColumn.find()) {
+                    throw new ServerException("Invalid aggregators column sql");
+                }
+                if (mAggFunc.find()) {
+                    throw new ServerException("Invalid aggregators function sql");
+                }
+            }
+        }
+        //check orders
+        if (!ListUtils.isEmpty(orders)) {
+            for (Order order : orders) {
+                Matcher mOrderColumn = PATTERN_SQL_INJECTION.matcher(order.getColumn().trim());
+                Matcher mOrderDirection = PATTERN_SQL_INJECTION.matcher(order.getDirection().trim());
+                if (mOrderColumn.find()) {
+                    throw new ServerException("Invalid orders column sql");
+                }
+                if (mOrderDirection.find()) {
+                    throw new ServerException("Invalid orders direction sql");
+                }
+            }
+        }
+
+        //TODO check filters
     }
 }

@@ -508,6 +508,9 @@ public class ViewServiceImpl extends BaseEntityService implements ViewService {
             return;
         }
 
+        //检查sql注入
+        executeParam.checkInjection();
+
         // 构造参数， 原有的被传入的替换
         STGroup stg = new STGroupFile(Constants.SQL_TEMPLATE);
         ST st = stg.getInstanceOf("querySql");

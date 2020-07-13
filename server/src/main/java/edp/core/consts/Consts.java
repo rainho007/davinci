@@ -200,4 +200,10 @@ public class Consts {
     public static final String JDBC_DATASOURCE_DEFAULT_VERSION = "Default";
 
     public static final String PATH_EXT_FORMATER = "lib" + File.separator  + "ext" + File.separator + "%s" + File.separator + "%s" + File.separator;
+
+    /**
+     * sql 注入检查
+     */
+    public static final String REG_SQL_INJECTION = "'|and|exec|insert|select|delete|update|count|chr|mid|master|truncate|char|declare|%|\\*|\\+|;|or|-|,|--|=";
+    public static final Pattern PATTERN_SQL_INJECTION = Pattern.compile(REG_SQL_INJECTION);
 }
