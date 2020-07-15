@@ -33,11 +33,11 @@ public class UserRegist {
     private String username;
 
     @NotBlank(message = "email cannot be EMPTY")
-    @Pattern(regexp = Constants.REG_EMAIL_FORMAT, message = "invalid email format")
+//    @Pattern(regexp = Constants.REG_EMAIL_FORMAT, message = "invalid email format")
     private String email;
 
     @NotBlank(message = "password cannot be EMPTY")
-    @Pattern(regexp = Constants.REG_USER_PASSWORD, message = "密码长度为6-20位")
+//    @Pattern(regexp = Constants.REG_USER_PASSWORD, message = "密码长度为6-20位")
     private String password;
 
     @Override

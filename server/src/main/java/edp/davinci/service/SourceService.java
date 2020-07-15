@@ -60,4 +60,12 @@ public interface SourceService extends CheckEntityService {
     List<DatasourceType> getDatasources();
 
     boolean reconnect(Long id, DbBaseInfo dbBaseInfo, User user) throws NotFoundException, UnAuthorizedExecption, ServerException;
+
+    void sourceCreateDecrypt(SourceCreate sourceCreate);
+
+    void sourceInfoDecrypt(SourceInfo source);
+
+    void SourceTestDecrypt(SourceTest sourceTest);
+
+    void dbBaseInfoDecrypt(DbBaseInfo dbBaseInfo);
 }

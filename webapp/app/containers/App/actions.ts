@@ -51,8 +51,11 @@ import {
   INITIATE_DOWNLOAD_TASK_SUCCESS,
   INITIATE_DOWNLOAD_TASK_FAILURE
 } from './constants'
+import { infoEncrypt } from 'utils/encrypt'
 
 export function login (username, password, resolve) {
+  username = infoEncrypt(username);
+  password = infoEncrypt(password);
   return {
     type: LOGIN,
     payload: {
@@ -227,6 +230,11 @@ export function updateProfileError () {
 
 
 export function changeUserPassword (user, resolve, reject) {
+  if (user){
+    user.password = infoEncrypt(user.password);
+    user.oldPassword = infoEncrypt(user.oldPassword);
+    user.confirmPassword = infoEncrypt(user.confirmPassword);
+  }
   return {
     type: CHANGE_USER_PASSWORD,
     payload: {

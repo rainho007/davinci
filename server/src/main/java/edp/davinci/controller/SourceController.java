@@ -144,6 +144,8 @@ public class SourceController extends BaseController {
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
 
+        sourceService.sourceCreateDecrypt(source);
+
         Source record = sourceService.createSource(source, user);
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request).payload(record));
     }
@@ -177,6 +179,8 @@ public class SourceController extends BaseController {
             ResultMap resultMap = new ResultMap(tokenUtils).failAndRefreshToken(request).message("Invalid source id");
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
+
+        sourceService.sourceInfoDecrypt(source);
 
         sourceService.updateSource(source, user);
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request));
@@ -227,6 +231,8 @@ public class SourceController extends BaseController {
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
 
+        sourceService.SourceTestDecrypt(sourceTest);
+
         sourceService.testSource(sourceTest);
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request));
     }
@@ -246,6 +252,8 @@ public class SourceController extends BaseController {
                                     @RequestBody DbBaseInfo dbBaseInfo,
                                     @ApiIgnore @CurrentUser User user,
                                     HttpServletRequest request) {
+        sourceService.dbBaseInfoDecrypt(dbBaseInfo);
+
         sourceService.reconnect(id, dbBaseInfo, user);
         return ResponseEntity.ok(new ResultMap(tokenUtils).successAndRefreshToken(request));
     }

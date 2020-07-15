@@ -74,6 +74,7 @@ public class UserController extends BaseController {
             ResultMap resultMap = new ResultMap().fail().message(bindingResult.getFieldErrors().get(0).getDefaultMessage());
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
+        userService.userRegistDecrypt(userRegist);
         User user = userService.regist(userRegist);
         return ResponseEntity.ok(new ResultMap().success().payload(tokenUtils.generateToken(user)));
     }
@@ -221,6 +222,8 @@ public class UserController extends BaseController {
         }
 
         try {
+            userService.changePasswordDecrypt(changePassword);
+
             ResultMap resultMap = userService.changeUserPassword(user, changePassword.getOldPassword(), changePassword.getPassword(), request);
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         } catch (Exception e) {

@@ -79,6 +79,9 @@ public class LoginController {
             return ResponseEntity.status(resultMap.getCode()).body(resultMap);
         }
 
+        //信息解密
+        userService.userLoginInfoDecrypt(userLogin);
+
         User user = userService.userLogin(userLogin);
         if (!user.getActive()) {
             log.info("this user is not active： {}", userLogin.getUsername());

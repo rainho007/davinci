@@ -26,8 +26,12 @@ import {
   SEND_MAIL_AGAIN_SUCCESS,
   SEND_MAIL_AGAIN_ERROR
 } from './constants'
+import { infoEncrypt } from 'utils/encrypt'
 
 export function signup (username, email, password, resolve) {
+  username = infoEncrypt(username);
+  password = infoEncrypt(password);
+  email = infoEncrypt(email);
   return {
     type: SIGNUP,
     payload: {

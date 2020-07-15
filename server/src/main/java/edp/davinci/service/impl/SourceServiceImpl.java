@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import edp.core.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -57,13 +58,6 @@ import edp.core.model.JdbcSourceInfo;
 import edp.core.model.JdbcSourceInfo.JdbcSourceInfoBuilder;
 import edp.core.model.QueryColumn;
 import edp.core.model.TableInfo;
-import edp.core.utils.BaseLock;
-import edp.core.utils.CollectionUtils;
-import edp.core.utils.DateUtils;
-import edp.core.utils.FileUtils;
-import edp.core.utils.RedisUtils;
-import edp.core.utils.SourceUtils;
-import edp.core.utils.SqlUtils;
 import edp.davinci.core.common.Constants;
 import edp.davinci.core.enums.CheckEntityEnum;
 import edp.davinci.core.enums.FileTypeEnum;
@@ -855,6 +849,74 @@ public class SourceServiceImpl extends BaseEntityService implements SourceServic
 				executorService.shutdown();
 			}
 		}
+	}
+
+	@Override
+	public void sourceCreateDecrypt(SourceCreate sourceCreate){
+		if (null != sourceCreate){
+			sourceConfigDecrypt(sourceCreate.getConfig());
+		}
+	}
+
+	@Override
+	public void sourceInfoDecrypt(SourceInfo source) {
+		if (null != source){
+			sourceConfigDecrypt(source.getConfig());
+		}
+	}
+
+	@Override
+	public void SourceTestDecrypt(SourceTest sourceTest) {
+		if (null != sourceTest) {
+			String username = sourceTest.getUsername();
+			String password = sourceTest.getPassword();
+
+			username = getDecryptInfo(username,"username decrypt");
+			password = getDecryptInfo(password,"password decrypt");
+
+			sourceTest.setUsername(username);
+			sourceTest.setPassword(password);
+		}
+	}
+
+	@Override
+	public void dbBaseInfoDecrypt(DbBaseInfo dbBaseInfo) {
+		if (null != dbBaseInfo) {
+			String username = dbBaseInfo.getDbUser();
+			String password = dbBaseInfo.getDbPassword();
+
+			username = getDecryptInfo(username,"username decrypt");
+			password = getDecryptInfo(password,"password decrypt");
+
+			dbBaseInfo.setDbUser(username);
+			dbBaseInfo.setDbPassword(password);
+		}
+	}
+
+	private void sourceConfigDecrypt(SourceConfig config) {
+		if (null != config) {
+			String username = config.getUsername();
+			String password = config.getPassword();
+
+
+			username = getDecryptInfo(username,"username decrypt");
+			password = getDecryptInfo(password,"password decrypt");
+
+			config.setUsername(username);
+			config.setPassword(password);
+		}
+	}
+
+	private String getDecryptInfo(String encodeString, String operation) {
+		String decodeString;
+		try {
+			decodeString = RSAUtils.decrypt(encodeString, RSAUtils.APP_PRIVATE_KEY);
+		} catch (Exception e) {
+			log.error("{} error,value (:{})  ", operation, encodeString);
+			throw new ServerException(operation + " error");
+		}
+
+		return decodeString;
 	}
 
 }

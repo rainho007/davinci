@@ -186,7 +186,7 @@ public class UserServiceImpl extends BaseEntityService implements UserService {
     	
     	String username = userLogin.getUsername();
     	String password = userLogin.getPassword();
-    	
+
         User user = getByUsername(username);
         if (user != null) {
 			// 校验密码
@@ -493,5 +493,83 @@ public class UserServiceImpl extends BaseEntityService implements UserService {
         }
         
         return resultMap.failAndRefreshToken(request, HttpCodeEnum.UNAUTHORIZED).message("You have not permission to view the user's information because you don't have any organizations that join together");
+    }
+
+    @Override
+    public void userLoginInfoDecrypt(UserLogin userLogin){
+        String userName  = userLogin.getUsername();
+        String password  = userLogin.getPassword();
+
+        try {
+            userName = RSAUtils.decrypt(userName, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("userName (:{}) decrypt error", userName);
+            throw new ServerException("userName decrypt error");
+        }
+
+        try {
+            password = RSAUtils.decrypt(password, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("password (:{}) decrypt error", password);
+            throw new ServerException("password decrypt error");
+        }
+
+        userLogin.setUsername(userName);
+        userLogin.setPassword(password);
+    }
+
+    @Override
+    public void changePasswordDecrypt(ChangePassword changePassword){
+        String oldPassword  = changePassword.getOldPassword();
+        String password  = changePassword.getPassword();
+
+        try {
+            oldPassword = RSAUtils.decrypt(oldPassword, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("oldPassword (:{}) decrypt error", oldPassword);
+            throw new ServerException("oldPassword decrypt error");
+        }
+
+        try {
+            password = RSAUtils.decrypt(password, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("password (:{}) decrypt error", password);
+            throw new ServerException("password decrypt error");
+        }
+
+        changePassword.setOldPassword(oldPassword);
+        changePassword.setPassword(password);
+    }
+
+    @Override
+    public void userRegistDecrypt(UserRegist userRegist) {
+        String userName  = userRegist.getUsername();
+        String password  = userRegist.getPassword();
+        String email  = userRegist.getEmail();
+
+        try {
+            userName = RSAUtils.decrypt(userName, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("userName (:{}) decrypt error", userName);
+            throw new ServerException("userName decrypt error");
+        }
+
+        try {
+            password = RSAUtils.decrypt(password, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("password (:{}) decrypt error", password);
+            throw new ServerException("password decrypt error");
+        }
+
+        try {
+            email = RSAUtils.decrypt(email, RSAUtils.APP_PRIVATE_KEY);
+        } catch (Exception e) {
+            log.error("email (:{}) decrypt error", email);
+            throw new ServerException("email decrypt error");
+        }
+
+        userRegist.setUsername(userName);
+        userRegist.setPassword(password);
+        userRegist.setEmail(email);
     }
 }

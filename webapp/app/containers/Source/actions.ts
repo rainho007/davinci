@@ -30,6 +30,7 @@ import {
   IDatabaseTables,
   IDatasourceInfo
 } from './types'
+import { infoEncrypt } from 'utils/encrypt'
 
 export const SourceActions = {
   loadSources (projectId: number) {
@@ -80,6 +81,14 @@ export const SourceActions = {
   },
 
   addSource (source: ISource, resolve: () => void) {
+    if (source && source.config){
+      let config =  source.config
+      let username = config.username
+      let password = config.password
+      config.username = infoEncrypt(username)
+      config.password = infoEncrypt(password)
+      source.config = config
+    }
     return {
       type: ActionTypes.ADD_SOURCE,
       payload: {
@@ -125,6 +134,14 @@ export const SourceActions = {
     }
   },
   editSource (source: ISource, resolve: () => void) {
+    if (source && source.config){
+      let config =  source.config
+      let username = config.username
+      let password = config.password
+      config.username = infoEncrypt(username)
+      config.password = infoEncrypt(password)
+      source.config = config
+    }
     return {
       type: ActionTypes.EDIT_SOURCE,
       payload: {
@@ -148,6 +165,12 @@ export const SourceActions = {
     }
   },
   testSourceConnection (testSource) {
+    if (testSource){
+      let username = testSource.username
+      let password = testSource.password
+      testSource.username = infoEncrypt(username)
+      testSource.password = infoEncrypt(password)
+    }
     return {
       type: ActionTypes.TEST_SOURCE_CONNECTION,
       payload: {
@@ -169,6 +192,12 @@ export const SourceActions = {
   },
 
   resetSourceConnection (properties: SourceResetConnectionProperties, resolve: () => void) {
+    if (properties){
+      let username = properties.username
+      let password = properties.password
+      properties.username = infoEncrypt(username)
+      properties.password = infoEncrypt(password)
+    }
     return {
       type: ActionTypes.RESET_SOURCE_CONNECTION,
       payload: {
