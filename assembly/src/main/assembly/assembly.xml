@@ -20,7 +20,7 @@
 
 
 <assembly>
-    <id>dist-beta.9</id>
+    <id>dist-beta.9-bugfix</id>
     <formats>
         <format>zip</format>
     </formats>
@@ -55,6 +55,7 @@
                 <exclude>upgrade.*</exclude>
                 <exclude>upgrade-*</exclude>
             </excludes>
+            <lineEnding>unix</lineEnding>
         </fileSet>
         <fileSet>
             <directory>
