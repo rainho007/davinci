@@ -3,8 +3,11 @@ import React, { createRef } from 'react'
 import { Input, Row, Col} from 'antd'
 import config, { env } from 'app/globalConfig'
 // FIXME
+let tempPath = `${location.pathname}${config[env].shareHost}`
+tempPath = tempPath ? tempPath.replace('//', '/') : ''
+
 const apiHost = `${location.origin}${config[env].host}`
-const shareHost = `${location.origin}${config[env].shareHost}`
+const shareHost = `${location.origin}${tempPath}`
 
 const styles = require('./SharePanel.less')
 
