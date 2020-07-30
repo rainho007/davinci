@@ -130,9 +130,9 @@ export class Organizations extends React.PureComponent<IOrganizationsProps & Rou
                   </Breadcrumb.Item>
                 </Breadcrumb>
               </Col>
-              <Col span={1} offset={3}>
+              {/* <Col span={1} offset={3}>
                 <Icon type="plus-circle-o"  className={styles.create} onClick={this.showOrganizationForm()}/>
-              </Col>
+              </Col> */}
             </Row>
           </Box.Title>
         </Box.Header>

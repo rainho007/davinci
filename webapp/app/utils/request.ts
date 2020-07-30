@@ -20,6 +20,16 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosPromise } from 'axios'
 
+// 动态获取parent提供的AppCode，填充到所有请求头里面，给网关做鉴权用
+if (parent && parent.window.getAppCode) {
+  console.log('getAppCode exist!')
+  parent.window.getAppCode((appCode: string) => {
+    axios.defaults.headers.common['X-AppCode'] = appCode
+  })
+} else {
+  console.log('getAppCode not exist!')
+}
+
 axios.defaults.validateStatus = function (status) {
   return status < 400
 }
